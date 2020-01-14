@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
 
 CREATE TABLE IF NOT EXISTS `reviews` (
   `id` smallint(5) NOT NULL AUTO_INCREMENT,
-  `product_id` smallint(5) DEFAULT NULL,
+  `book_id` smallint(5) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   `content` text DEFAULT NULL,
   `score` smallint(5) DEFAULT NULL,
@@ -43,20 +43,21 @@ CREATE TABLE IF NOT EXISTS `reviews` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `products`
+-- Table structure for table `books`
 --
 
-CREATE TABLE IF NOT EXISTS `products` (
+CREATE TABLE IF NOT EXISTS `books` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `category_id` smallint(5) DEFAULT NULL,
   `name` varchar(30) DEFAULT NULL,
+  `author` varchar(30) DEFAULT NULL,
   `description` varchar(100) DEFAULT NULL,
   `price` int(11) NOT NULL,
   `image` varchar(100) DEFAULT NULL,
   `createdAt` timestamp,
   `updatedAt` timestamp,
   PRIMARY KEY (`id`),
-  KEY `id_produse` (`id`)
+  KEY `id_books` (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 

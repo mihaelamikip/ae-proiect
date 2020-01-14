@@ -1,40 +1,41 @@
 $(document).ready(function(){
     showCategories()
-    showProducts()
+    showBooks()
 })
 
 function showCategories() {
     $.get( "/categories", function( data ) {
         var html = ''
         data.forEach(function(category) {
-            html = html + '<li><a href="#" onClick="showProducts('+category.id+')">'+category.name+'</a></li>'
+            html = html + '<li><a href="#" onClick="showBooks('+category.id+')">'+category.name+'</a></li>'
         })
         $('#categories').html(html)
     });
 }
 
-//todo: implement showProducts method
-function showProducts(categoryId) {
+//todo: implement showBooks method
+function showBooks(categoryId) {
     if(categoryId) {
-        var url = '/categories/'+ categoryId +'/products';
+        var url = '/categories/'+ categoryId +'/books';
     } else {
-        var url = '/products'   
+        var url = '/books'   
     }
     $.get(url, function(data) {
         var html = '';
         data.forEach(
-            function(product) {
-                html = html + '<div class="product">'
-                  +  '<h2>'+product.name+'</h2>'
-                  +  '<p>'+product.description+'</p>'
-                  +  '<p>Pret: '+product.pret+'</p>'
-                  +  '<p>Categorie: '+product.category.name+'</p>'
+            function(book) {
+                html = html + '<div class="book">'
+                  +  '<h2>'+ book.name +'</h2>'
+                  +  '<p>Autor: ' + book.author + '</p'
+                  +  '<p>'+ book.description +'</p>'
+                  +  '<p>Pret: '+ book.pret +'</p>'
+                  +  '<p>Categorie: '+book.category.name+'</p>'
                 + '</div>';
                 
-                html = html + '<h3>Product reviews</h3>'
+                html = html + '<h3>Book reviews</h3>'
                 
-                if(product.reviews) {
-                    product.reviews.forEach(
+                if(book.reviews) {
+                    book.reviews.forEach(
                         function(reviewData) {
                             html = html + reviewData.name + ' ' + reviewData.content;
                             html = html + '<br>';

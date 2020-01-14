@@ -18,6 +18,7 @@
     "catalog"
   ],
   "author": "eduardbudacu",
+  "main": "server.js" ,
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/eduardbudacu/bdsa-product-catalog/issues"

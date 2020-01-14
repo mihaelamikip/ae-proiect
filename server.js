@@ -2,7 +2,6 @@ var express = require("express")
 var Sequelize = require("sequelize")
 
 //connect to mysql database
-//baza de date, username, password
 var sequelize = new Sequelize('catalog', 'mikip1996', 'mikip1996', {
     dialect:'mysql',
     host:'localhost'
@@ -20,8 +19,9 @@ var Categories = sequelize.define('categories', {
     description: Sequelize.STRING
 })
 
-var Products = sequelize.define('products', {
+var Books = sequelize.define('books', {
     name: Sequelize.STRING,
+    author: Sequelize.STRING,
     category_id: Sequelize.INTEGER,
     description: Sequelize.STRING,
     price: Sequelize.INTEGER,
@@ -29,14 +29,14 @@ var Products = sequelize.define('products', {
 })
 
 var Reviews = sequelize.define('reviews', {
-    product_id: Sequelize.INTEGER,
+    book_id: Sequelize.INTEGER,
     name: Sequelize.STRING,
     content: Sequelize.STRING,
     score: Sequelize.INTEGER
 })
 
-Products.belongsTo(Categories, {foreignKey: 'category_id', targetKey: 'id'})
-Products.hasMany(Reviews, {foreignKey: 'product_id'});
+Books.belongsTo(Categories, {foreignKey: 'category_id', targetKey: 'id'})
+Books.hasMany(Reviews, {foreignKey: 'book_id'});
 
 var app = express()
 
@@ -115,54 +115,54 @@ app.delete('/categories/:id', function(request, response) {
     })
 })
 
-app.get('/products', function(request, response) {
-    Products.findAll(
+app.get('/books', function(request, response) {
+    Books.findAll(
         {
             include: [{
                 model: Categories,
-                where: { id: Sequelize.col('products.category_id') }
+                where: { id: Sequelize.col('books.category_id') }
             }, {
                 model: Reviews,
-                where: { id: Sequelize.col('products.id')},
+                where: { id: Sequelize.col('books.id')},
                 required: false
             }]
         }
         
         ).then(
-            function(products) {
-                response.status(200).send(products)
+            function(books) {
+                response.status(200).send(books)
             }
         )
 })
 
-app.get('/products/:id', function(request, response) {
-    Products.findById(request.params.id, {
+app.get('/books/:id', function(request, response) {
+    Books.findById(request.params.id, {
             include: [{
                 model: Categories,
-                where: { id: Sequelize.col('products.category_id') }
+                where: { id: Sequelize.col('books.category_id') }
             }, {
                 model: Reviews,
-                where: { id: Sequelize.col('products.id')},
+                where: { id: Sequelize.col('books.id')},
                 required: false
             }]
         }).then(
-            function(product) {
-                response.status(200).send(product)
+            function(book) {
+                response.status(200).send(book)
             }
         )
 })
 
-app.post('/products', function(request, response) {
-    Products.create(request.body).then(function(product) {
-        response.status(201).send(product)
+app.post('/books', function(request, response) {
+    Books.create(request.body).then(function(book) {
+        response.status(201).send(book)
     })
 })
 
-app.put('/products/:id', function(request, response) {
-    Products.findById(request.params.id).then(function(product) {
-        if(product) {
-            product.update(request.body).then(function(product){
-                response.status(201).send(product)
+app.put('/books/:id', function(request, response) {
+    Books.findById(request.params.id).then(function(book) {
+        if(book) {
+            book.update(request.body).then(function(book){
+                response.status(201).send(book)
             }).catch(function(error) {
                 response.status(200).send(error)
             })
@@ -172,10 +172,10 @@ app.put('/products/:id', function(request, response) {
     })
 })
 
-app.delete('/products/:id', function(request, response) {
-    Products.findById(request.params.id).then(function(product) {
-        if(product) {
-            product.destroy().then(function(){
+app.delete('/books/:id', function(request, response) {
+    Books.findById(request.params.id).then(function(book) {
+        if(book) {
+            book.destroy().then(function(){
                 response.status(204).send()
             })
         } else {
@@ -184,22 +184,22 @@ app.delete('/products/:id', function(request, response) {
     })
 })
 
-app.get('/categories/:id/products', function(request, response) {
-    Products.findAll({
+app.get('/categories/:id/books', function(request, response) {
+    Books.findAll({
             where:{category_id: request.params.id},
             
             include: [{
                 model: Categories,
-                where: { id: Sequelize.col('products.category_id') }
+                where: { id: Sequelize.col('books.category_id') }
             }, {
                 model: Reviews,
-                where: { id: Sequelize.col('products.id')},
+                where: { id: Sequelize.col('books.id')},
                 required: false
             }]
         }
             ).then(
-            function(products) {
-                response.status(200).send(products)
+            function(books) {
+                response.status(200).send(books)
             }
         )
 })

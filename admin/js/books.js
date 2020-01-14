@@ -7,7 +7,7 @@ $(document).ready(function () {
 
 // READ records
 function readRecords() {
-    $.get("/products/", {}, function (data, status) {
+    $.get("/books/", {}, function (data, status) {
         data.forEach(function(value) {
             var row = '<tr id="row_id_'+ value.id +'">'
             			+ displayColumns(value)
@@ -36,11 +36,11 @@ function addRecord() {
     $('#name').val('');
     $('#description').val('');
     
-    $('#myModalLabel').html('Add New Product');
+    $('#myModalLabel').html('Add New Book');
 }
 
 function viewRecord(id) {
-    var url = "/products/" + id;
+    var url = "/books/" + id;
     
     $.get(url, {}, function (data, status) {
         //bind the values to the form fields
@@ -48,7 +48,7 @@ function viewRecord(id) {
         $('#name').val(data.name);
         $('#description').val(data.description);
         $('#id').val(id);
-        $('#myModalLabel').html('Edit Product');
+        $('#myModalLabel').html('Edit Book');
         
         $('#add_new_record_modal').modal('show');
     });
@@ -68,7 +68,7 @@ function saveRecord() {
 
 function createRecord(formData) {
     $.ajax({
-        url: '/products/',
+        url: '/books/',
         type: 'POST',
         accepts: {
             json: 'application/json'
@@ -87,7 +87,7 @@ function createRecord(formData) {
 
 function updateRecord(formData) {
     $.ajax({
-        url: '/products/'+formData.id,
+        url: '/books/'+formData.id,
         type: 'PUT',
         accepts: {
             json: 'application/json'
@@ -104,7 +104,7 @@ function updateRecord(formData) {
 
 function deleteRecord(id) {
     $.ajax({
-        url: '/products/'+id,
+        url: '/books/'+id,
         type: 'DELETE',
         success: function(data) {
             $('#row_id_'+id).remove();
